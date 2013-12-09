@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: stats.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #ifndef H_STATS
 #define H_STATS
 
@@ -49,6 +46,13 @@ extern int gv_visual, gv_savepop, gv_saverun;
 #define VISUAL_AVE 2
 #define VISUAL_MAX 3
 
-#include "stats.p"
+/* prototypes */
+
+void freemisc(void);
+void saver(char *file);
+void restorer(char *file);
+void printr(int i);
+void displays(void);
 
 #endif /* H_STATS */
+

@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: gpplots.c,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #define _GNU_SOURCE  /* per popen/pclose e mktemp */
 
 #include "config.h"
@@ -44,18 +41,18 @@ gp_port gp_open( char *geom )
   else
     strcpy( cmd, "gnuplot" );
 #endif
-  
+
   if ( ( port=popen( cmd, "w")) == NULL)
     yperrorf( "popening gnuplot" );
-  setvbuf( port, NULL, _IONBF, 0 );   
+  setvbuf( port, NULL, _IONBF, 0 );
 
   return port;
 }
 
 void gp_close( gp_port port )
 {
-  if ( pclose( port ) < 0 ) 
-    yperrorf( "pclosing gnuplot" ); 
+  if ( pclose( port ) < 0 )
+    yperrorf( "pclosing gnuplot" );
 }
 
 void gp_title( gp_port port, char *msg )
@@ -75,9 +72,9 @@ void gp_plotfile( gp_port port, int replot, char *style, char *filename )
 
   if ( replot == GP_REPLOT )
 	  sprintf( cmd, "replot '%s' %s\n", filename, style );
-  else	
+  else
 	  sprintf( cmd, "plot '%s' %s\n", filename, style );
-  
+
   gp_tell( port, cmd );
 }
 

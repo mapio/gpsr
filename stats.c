@@ -17,14 +17,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: stats.c,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h> 
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -48,15 +45,15 @@ int gv_visual, gv_savepop, gv_saverun;
 void freemisc( void )
 {
 	int i;
-	
+
 	assert( 0 < status.totgen && status.totgen <= MAX_GENERATIONS );
 	assert( 0 < status.datan && status.datan <= MAX_DATAN );
-	
+
 	freei( status.bssfi );
-	for ( i = 0; i < status.totgen; i++ ) 
+	for ( i = 0; i < status.totgen; i++ )
 		freei( run[i].besti );
 	for ( i = 0; i < status.datan; i++ )
-		yfree( status.dataf[i++] );		
+		yfree( status.dataf[i++] );
 }
 
 /*
@@ -68,14 +65,14 @@ void saver( char *file )
 	char filext[MAX_FILENAME_LEN + 4];
 
 	assert( file );
-	assert_statusok(); 
+	assert_statusok();
 
 	ystrncpy( filext, file, MAX_FILENAME_LEN );
 	strcat( filext, ".run" );
 
-	if (  ( fd = open( filext, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR ) ) < 0 ) 
+	if (  ( fd = open( filext, O_WRONLY|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR ) ) < 0 )
 		yperror( "can't save runs to '%s'", filext );
-	
+
 	for ( i = 0; i < status.curgen; i++ ) {
 		ywrite( fd, &(run[i]), sizeof(run[i]) );
 		writei( fd, run[i].besti );
@@ -93,12 +90,12 @@ void restorer( char *file )
 	char filext[MAX_FILENAME_LEN + 4];
 
 	assert( file );
-	assert_statusok(); 
+	assert_statusok();
 
 	ystrncpy( filext, file, MAX_FILENAME_LEN );
 	strcat( filext, ".run" );
 
-	if (  ( fd = open( filext,  O_RDONLY ) ) < 0 ) 
+	if (  ( fd = open( filext,  O_RDONLY ) ) < 0 )
 		yperror( "can't restore runs from '%s'", filext );
 
 	for ( i = 0; i < status.curgen; i++ ) {
@@ -121,7 +118,7 @@ void printr( int i )
 	printf( "----------- \n" );
 	printf( "usedmem   : %d\n", run[i].usedmem );
 #ifndef FAST_STATS
-	printf( "mintok    : %d\n", run[i].mintok );	
+	printf( "mintok    : %d\n", run[i].mintok );
 	printf( "avetok    : %d\n", run[i].avetok );
 	printf( "maxtok    : %d\n", run[i].maxtok );
 	printf( "minval    : %d\n", run[i].minval );
@@ -139,7 +136,7 @@ void printr( int i )
 void displays( void )
 {
 	int i;
-	
+
     assert_statusok();
 	assert( status.curgen > 0 );
 	i = status.curgen - 1;
@@ -151,7 +148,7 @@ void displays( void )
 	printw( "bssfadjf  : %e (%e)\n", status.bssfadjf, 1.0/status.bssfadjf-1.0 );
 	if ( gv_visual == VISUAL_MAX ) {
 		printw( "bssfi     : \n" );
-		displayi( status.bssfi ); 
+		displayi( status.bssfi );
 	}
 	printw( "----------- \n" );
 	printw( "maxadjf   : %e\n", run[i].maxadjf );
@@ -159,12 +156,12 @@ void displays( void )
 	printw( "varadjf   : %e\n", run[i].varadjf );
 	if ( gv_visual == VISUAL_MAX ) {
 		printw( "besti     : \n" );
-		displayi( run[i].besti ); 
+		displayi( run[i].besti );
 	}
 	printw( "----------- \n" );
 	printw( "usedmem   : %d\n", run[i].usedmem );
 #ifndef FAST_STATS
-	printw( "mintok    : %d\n", run[i].mintok );	
+	printw( "mintok    : %d\n", run[i].mintok );
 	printw( "avetok    : %d\n", run[i].avetok );
 	printw( "maxtok    : %d\n", run[i].maxtok );
 	printw( "minval    : %d\n", run[i].minval );

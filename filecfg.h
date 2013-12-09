@@ -17,12 +17,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: filecfg.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #ifndef H_FILECFG
 #define H_FILECFG
 
-#include "filecfg.p"
+/* prototypes */
+
+char *findparam(char *name);
+void readparams(char *file);
 
 #endif /* H_FILECFG */

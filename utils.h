@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: utils.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #ifndef H_MEMORY
 #define H_MEMORY
 
@@ -27,8 +24,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
-
-#include "utils.p"
 
 #define ymessagef( args... )   ymessage( args )
 
@@ -49,5 +44,17 @@
 #else
 #define yDEBUG( args... )
 #endif
+
+/* prototypes */
+
+int ymallocuse(void);
+void *ymalloc(size_t size);
+void yfree(void *ptr);
+void *yrealloc(void *ptr, size_t size);
+ssize_t yread(int fd, void *buf, size_t count);
+ssize_t ywrite(int fd, const void *buf, size_t count);
+char *ystrncpy(char *dest, const char *src, size_t n);
+void ymessage(const char *template, ...);
+int yexists(char *file);
 
 #endif /* H_MEMORY */

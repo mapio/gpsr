@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: cat.c,v 1.2 2006/06/06 07:33:29 santini Exp $ */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -71,32 +68,32 @@ int main( int argc, char **argv )
 		  gen = atoi( optarg );
 		}
 	}
-	
+
 	if (optind == argc - 1)
 		ystrncpy( file, argv[optind], MAX_FILENAME_LEN );
 	else
 		yerror( "missing filename\n" );
 
 	restores( file );
-	
+
 	switch( what ) {
-		
+
 	case CAT_GEN:
 		prints();
 		break;
-		
+
 	case CAT_MAX:
 		restorer( file );
 		for ( i = 0; i < status.curgen; i++ )
 			printf( "%e\n", run[i].maxadjf );
 		break;
-		
+
 	case CAT_AVE:
 		restorer( file );
 		for ( i = 0; i < status.curgen; i++ )
 			printf( "%e\n", run[i].aveadjf );
 		break;
-		
+
 	case CAT_IND:
 #ifdef HAS_SIMPLIFY
 		printsi( status.bssfi );
@@ -104,7 +101,7 @@ int main( int argc, char **argv )
 		printi( status.bssfi );
 #endif
 		break;
-		
+
 	case CAT_FOR:
 	  if ( gen < 1 || gen > status.curgen ) {
 		yerror( "gen must be in [1,%d]\n", status.curgen );
@@ -118,9 +115,9 @@ int main( int argc, char **argv )
 		  printf( "%f\n", f.v[i] );
 	  }
 	  break;
-	  
+
 	case CAT_BSS:
-	  
+
 	  if ( gen < 1 || gen > status.curgen ) {
 		yerror( "gen must be in [1,%d]\n", status.curgen );
 	  } else {
@@ -138,23 +135,23 @@ int main( int argc, char **argv )
 		}
 	  }
 	  break;
-	
+
 	case CAT_DAT:
 	  {
 		int t;
-		
+
 		for( i = 0; i < status.datan; i++ )
 		  readdata( status.dataf[i], i );
 		restorer( file );
-		for ( t = 0; t < datalen( DATA_TARGET ); t++ ) 
+		for ( t = 0; t < datalen( DATA_TARGET ); t++ )
 		  printf( "%d %f\n", t, getdata( DATA_TARGET, t ) );
-		
+
 	  }
 	  break;
 
 	}
-	
-	
-	
+
+
+
 	return 0;
 }

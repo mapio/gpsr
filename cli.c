@@ -17,7 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,7 +29,6 @@
 #include "stats.h"
 #include "signal.h"
 #include "gpplots.h"
-#include "cli.ps"
 
 #define CMDARGSIZE 255
 #define HISTORYFILE ".graphics_history"
@@ -38,6 +36,20 @@
 static char historyfile[CMDARGSIZE];
 
 static gp_port port;
+
+static void help(const char *line);
+static void quit(const char *line);
+static void sndcmd(const char *line);
+static void ploti(const char *line);
+static void plotr(const char *line);
+static void pprinti(const char *line);
+static void padjfi(const char *line);
+static void pprintsi(const char *line);
+static void plotd(const char *line);
+static void plotma(const char *line);
+static void plotva(const char *line);
+static void plotava(const char *line);
+static void parser(char *line);
 
 static struct command {
 	char *cmd, *scmd, *help;
@@ -61,10 +73,10 @@ static struct command {
 static struct {
 	char current_cmd[CMDARGSIZE];
 	char structure_present;
-	char plot_initialized; 
+	char plot_initialized;
 } parserstatus = { "", 0, 0 };
 
-/* EXTERN FUNCS */ 
+/* EXTERN FUNCS */
 
 void p_error( const char *str )
 {
@@ -74,7 +86,7 @@ void p_error( const char *str )
 void p_perror( const char *str )
 {
 	char buf[CMDARGSIZE];
-	
+
 	sprintf( buf, "%s: %s", parserstatus.current_cmd, str );
 	perror( buf );
 }
@@ -87,7 +99,7 @@ static void help(const char *line)
 	char arg[CMDARGSIZE], buf[CMDARGSIZE];
 
 	if ( sscanf( line, "%*s %s", arg ) == 1 ) {
-		for ( i=0; commands[i].cmd; i++ ) 
+		for ( i=0; commands[i].cmd; i++ )
 			if ( !strcmp( arg, commands[i].scmd ) || !strcmp( arg, commands[i].cmd ) ) {
 				printf( "%s (%s): %s\n", commands[i].cmd,  commands[i].scmd,  commands[i].help );
 				break; }
@@ -97,7 +109,7 @@ static void help(const char *line)
 		}
 	} else {
 		printf( "available commands:\n" );
-		for ( i=0; commands[i].cmd; i++ ) 
+		for ( i=0; commands[i].cmd; i++ )
 			printf( "%s (%s): %s\n",  commands[i].cmd,  commands[i].scmd,  commands[i].help );
 	}
 
@@ -162,7 +174,7 @@ static void ploti(const char *line )
 			yfree( dx );
 			yfree( dy );
 		} else
-			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen ); 
+			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen );
 	} else
 		p_error( "no individual" );
 }
@@ -201,7 +213,7 @@ static void plotr(const char *line )
 			yfree( x );
 			yfree( y );
 		} else
-			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen ); 
+			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen );
 	} else
 		p_error( "no individual" );
 }
@@ -214,7 +226,7 @@ static void pprinti(const char *line )
 		if ( 0 < g && g <= status.curgen ) {
 			printi( run[g-1].besti );
 		} else
-			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen ); 
+			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen );
 	} else
 		p_error( "no individual" );
 }
@@ -227,7 +239,7 @@ static void padjfi(const char *line )
 		if ( 0 < g && g <= status.curgen ) {
 			printf( "adjf[i] = %e\n", adjfitnessi( run[g-1].besti ) );
 		} else
-			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen ); 
+			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen );
 	} else
 		p_error( "no individual" );
 }
@@ -244,7 +256,7 @@ static void pprintsi(const char *line )
 			printi( run[g-1].besti );
 #endif
 		} else
-			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen ); 
+			fprintf( stderr, "individual must lie in [1,%d]\n", status.curgen );
 	} else
 		p_error( "no individual" );
 }
@@ -272,7 +284,7 @@ static void plotva(const char *line )
 
 	y1 = ymalloc( status.curgen * sizeof(plotv) );
 	y2 = ymalloc( status.curgen * sizeof(plotv) );
-	for ( i = 0; i < status.curgen; i++ ) y1[i] = run[i].aveadjf; 
+	for ( i = 0; i < status.curgen; i++ ) y1[i] = run[i].aveadjf;
 	gp_plotarray( port, GP_PLOT, GP_TITLE "\"average adjf\"" GP_DOTS, NULL, y1, status.curgen );
 	yfree( y1 );
 }
@@ -284,9 +296,9 @@ static void plotava(const char *line )
 
 	y1 = ymalloc( status.curgen * sizeof(plotv) );
 	y2 = ymalloc( status.curgen * sizeof(plotv) );
-	for ( i = 0; i < status.curgen; i++ ) { 
-		y1[i] = run[i].aveadjf; 
-		y2[i] = run[i].varadjf; 
+	for ( i = 0; i < status.curgen; i++ ) {
+		y1[i] = run[i].aveadjf;
+		y2[i] = run[i].varadjf;
 	}
 	gp_plotarray( port, GP_PLOT, GP_TITLE "\"average adjf\"" GP_DOTS, NULL, y1, status.curgen );
 	gp_plotarray( port, GP_REPLOT, GP_TITLE "\"variance adjf\"" GP_DOTS, NULL, y2, status.curgen );
@@ -300,7 +312,7 @@ static void parser( char *line )
 {
 	char cmd[CMDARGSIZE];
 	int i;
-	
+
 	if ( line != NULL ) {
 		sscanf( line, "%s", cmd );
 		for ( i=0; commands[i].cmd; i++ ) {
@@ -309,7 +321,7 @@ static void parser( char *line )
 				commands[i].function( line );
 				break; }
 		}
-		if ( !commands[i].cmd && line[0] ) 
+		if ( !commands[i].cmd && line[0] )
 			printf( "error: there is no \"%s\" command\n", cmd );
 	}
 }
@@ -319,19 +331,19 @@ int main( int argc, char **argv )
 	char file[MAX_FILENAME_LEN + 1];
 	char *line, *prompt="> ";
 	int i;
-	
+
 	if ( argc == 2 )
 		ystrncpy( file, argv[1], MAX_FILENAME_LEN );
 	else
 		yerror( "missing filename\n" );
-	
+
 	restores( file );
 	prints();
 	restorer( file );
-	
+
 	for( i = 0; i < status.datan; i++ )
 		readdata( status.dataf[i], i );
-	
+
 	port = gp_open( "400x400" );
 	using_history();
 	stifle_history(1000);
@@ -344,7 +356,7 @@ int main( int argc, char **argv )
 		if ( line ) {
 			add_history( line );
 			parser( line );
-			
+
 		} else printf( "\n" );
 	}
 	return 0;

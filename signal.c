@@ -17,10 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: signal.c,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
-
 #include "config.h"
 
 #ifdef __sgi__
@@ -67,9 +63,9 @@ void handler( int s )
 	  ymessage( "Current runs stats saved in file \"emergency.run\"\n" );
 	  prints();
 	  exit( EXIT_SUCCESS );
-	
+
 	}
-	
+
 	if ( s == SIGHUP  ) {
 		if ( status.curgen > 0 ) {
 			savep( "dump" );

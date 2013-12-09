@@ -18,8 +18,6 @@
 */
 
 
-/* $Id: genetic.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #ifndef H_GENETIC
 #define H_GENETIC
 
@@ -52,7 +50,7 @@ struct statuss {
 	int length;         /* la lunghezza della previsione */
 	int totgen;         /* il numero totale di generazioni */
 	int curgen;         /* la generazione corrente */
-	probv mutatep;      /* probabilita' di mutazione */ 
+	probv mutatep;      /* probabilita' di mutazione */
 	probv crossoverp;   /* probabilita' di crossover */
 	probv selectionrho; /* frazione di selezione */
 	int elitism;        /* {0,1}, a seconda che {no, si} */
@@ -76,6 +74,32 @@ extern struct statuss status;
   assert( 0 < status.datan && status.datan <= MAX_DATAN ); \
   assert( 0 <= status.curgen && status.curgen <= MAX_GENERATIONS ); }
 
-#include "genetic.p"
+/* prototypes */
+
+individual *alloci(void);
+void freei(individual *i);
+individual *dupi(individual *s);
+void writei(int fd, individual *i);
+individual *readi(int fd);
+forecast evali(individual *i, int t);
+individual *rndi(int md);
+void freep(void);
+void initp(void);
+void rndp(void);
+void savep(char *file);
+void restorep(char *file);
+void saves(char *file);
+void restores(char *file);
+void prints(void);
+void displayi(individual *i);
+void getgpsrcfg(char *file);
+struct rstats statisticsp(void);
+void fprinti(FILE *stream, individual *i);
+void fprintsi(FILE *stream, individual *i);
+fitnessv adjfitnessi(individual *i);
+void crossoverp(void);
+void mutatep(void);
+void selectionp(void);
+void generationp(void);
 
 #endif /* H_GENETIC */

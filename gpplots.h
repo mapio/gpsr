@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: gpplots.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 typedef FILE *gp_port;
 
 #include <stdlib.h>
@@ -31,7 +28,14 @@ typedef FILE *gp_port;
 #define GP_LINES  " with lines "
 #define GP_TITLE  " title "
 
-#include "gpplots.p"
+/* prototypes */
+
+gp_port gp_open(char *geom);
+void gp_close(gp_port port);
+void gp_title(gp_port port, char *msg);
+void gp_save(gp_port port, char *term, char *file);
+void gp_plotfile(gp_port port, int replot, char *style, char *filename);
+void gp_plotarray(gp_port port, int replot, char *style, plotv *x, plotv *y, int n);
 
 #define gp_tell fprintf
 

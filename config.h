@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: config.h,v 1.2 2006/06/06 07:33:29 santini Exp $ */
-
 #ifndef  H_CONFIG
 #define  H_CONFIG
 
@@ -44,6 +41,7 @@
 #define MUTATE_RNDICROSSOVER
 #define CROSSOVER_OLD
 #define HAS_SIMPLIFY
+#define HAS_CURSES
 
 /* NOT DEFINED
 
@@ -64,20 +62,5 @@ typedef double datav;    /* valori delle serie storiche */
 typedef double probv;    /* valori [0,1] della probabilita' */
 typedef double plotv;    /* valori da plottare, deve essere uguale a sopra!!! */
 
-/* porting */
-
-#ifndef __sgi__
-#define HAS_CURSES
-// #define HAS_MALLINFO
-// #define HAS_PROGSHORTNAME
-#endif
-
-/* cproto */
-
-#ifdef NOINLINE
-#define my_inline
-#else
-#define my_inline __inline__ static
-#endif
 
 #endif /* H_CONFIG */

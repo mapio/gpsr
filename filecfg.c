@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: filecfg.c,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #include "config.h"
 
 #include <stdio.h>
@@ -36,7 +33,7 @@ struct params {
 };
 
 static struct params param[PARAM_MAX];
-static int paramcount;
+static size_t paramcount;
 
 static int paramcompar(const void *s1, const void *s2)
 {
@@ -46,7 +43,7 @@ static int paramcompar(const void *s1, const void *s2)
 char *findparam( char *name )
 {
 	struct params *found, t;
-	
+
 	found = (struct params *)lfind( name, param, &paramcount, sizeof(struct params), paramcompar );
 /*	found = (struct params *)qsearch( name, param, paramcount, sizeof(struct params), paramcompar ); */
 
@@ -63,12 +60,12 @@ void readparams( char *file )
 {
 	FILE *in;
 
-	if ((in = fopen(file, "r")) == NULL) 
+	if ((in = fopen(file, "r")) == NULL)
 		yperror( "can't open config file '%s'", file );
 
 	paramcount = 0;
 	while ( !feof(in) ) {
-		if ( fscanf( in, PARAM_FMT, param[paramcount].name, param[paramcount].value ) != 2 ) 
+		if ( fscanf( in, PARAM_FMT, param[paramcount].name, param[paramcount].value ) != 2 )
 			yerror("file format error in config file '%s'\n", file );
 		paramcount++;
 	}

@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: gpsr.c,v 1.2 2006/06/06 07:33:29 santini Exp $ */
-
 #include "config.h"
 
 #include <stdio.h>
@@ -119,12 +116,12 @@ void getargs( int argc, char **argv )
 			break;
 		case 1:
 			status.horizon = atoi( optarg );
-			if ( status.horizon <= 0  ) 
+			if ( status.horizon <= 0  )
 				yerror( "horizon must be >=1\n" );
 			break;
 		case 2:
 			status.length = atoi( optarg );
-			if ( status.length <= 0 || status.length > MAX_LENGTH_SIZE ) 
+			if ( status.length <= 0 || status.length > MAX_LENGTH_SIZE )
 				yerror( "length must be in [1,%d]\n", MAX_LENGTH_SIZE );
 			break;
 		case 3:
@@ -134,22 +131,22 @@ void getargs( int argc, char **argv )
 			break;
 		case 4:
 			status.seed = atoi( optarg );
-			if ( status.seed <= 0 ) 
+			if ( status.seed <= 0 )
 				yerror( "seed must be positive\n" );
 			break;
 		case 5:
 			status.totgen = atoi( optarg );
-			if ( status.totgen <= 0 || status.totgen > MAX_GENERATIONS ) 
+			if ( status.totgen <= 0 || status.totgen > MAX_GENERATIONS )
 				yerror( "generations must be in [1,%d]\n", MAX_GENERATIONS );
 			break;
 		case 6:
 			status.mutatep = atof( optarg );
-			if ( status.mutatep < 0.0 || status.mutatep > 1.0 ) 
+			if ( status.mutatep < 0.0 || status.mutatep > 1.0 )
 				yerror( "mutatep must be in [0,1]\n" );
 			break;
 		case 7:
 			status.crossoverp = atof( optarg );
-			if ( status.crossoverp < 0.0 || status.crossoverp > 1.0 ) 
+			if ( status.crossoverp < 0.0 || status.crossoverp > 1.0 )
 				yerror( "crossoverp must be in [0,1]\n" );
 			break;
 		case 8:
@@ -167,11 +164,11 @@ void getargs( int argc, char **argv )
 		case 11: case 12:
 			/* opzioni con argomento autosettato */
 			break;
-		case 13: 
+		case 13:
 			status.selectionrho = atof( optarg );
-			if ( status.selectionrho < 0.0 || status.selectionrho > 1.0 ) 
+			if ( status.selectionrho < 0.0 || status.selectionrho > 1.0 )
 				yerror( "selectionrho must be in {0} (fitness proportional), or (0,1]\n" );
-			break;			
+			break;
 		case 14:
 			getgpsrcfg( optarg );
 			break;
@@ -197,11 +194,11 @@ void saveall( void )
 	saves( status.savef );
 	ymessage( "status saved in %s.sts\n", status.savef );
 	if ( gv_saverun ) {
-		saver( status.savef ); 
+		saver( status.savef );
 		ymessage( "runs stats saved in %s.run\n", status.savef );
 	}
 	if ( gv_savepop ) {
-		savep( status.savef ); 
+		savep( status.savef );
 		ymessage( "population saved in %s.pop\n", status.savef );
 	}
 }
@@ -223,7 +220,7 @@ int main( int argc, char **argv )
 		if ( tokgp( TOK_DATA ) == 0.0 ) equiprobfunc();
 		initp();
 		rndp();
-	} 
+	}
 
 	if ( gv_visual >= VISUAL_AVE ) {
 #ifdef HAS_CURSES
@@ -232,11 +229,11 @@ int main( int argc, char **argv )
 	} else handler(-1);
 
 	generationp();
-	
+
 #ifdef HAS_CURSES
 	if ( gv_visual >= VISUAL_AVE ) endwin();
 #endif
-	
+
 	saveall();
 
 	return 0;

@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: utils.c,v 1.2 2006/06/06 07:33:29 santini Exp $ */
-
 #include "config.h"
 
 #include <stdarg.h>
@@ -27,7 +24,6 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <malloc.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -38,9 +34,9 @@ int ymallocuse( void )
 {
 #ifdef HAS_MALLINFO
 	struct mallinfo i;
-	
+
 	i=mallinfo();
-	
+
 	return i.uordblks;
 #else
 	return 0;
@@ -72,7 +68,7 @@ void yfree( void *ptr )
 void *yrealloc(void *ptr, size_t size)
 {
 	void *x;
-	
+
 	assert( ptr );
 	assert( size >= 0 );
 
@@ -104,7 +100,7 @@ ssize_t ywrite(int fd, const void *buf, size_t count)
 
 	if ( r < 0 ) yperrorf( "" );
 	if ( r < count ) ywarningf( "count=%d, read=%d\n", count, r );
-		
+
 	return r;
 }
 
@@ -112,10 +108,10 @@ char *ystrncpy(char *dest, const char *src, size_t n)
 {
 	assert( dest );
 	assert( src );
-	
+
 	strncpy( dest, src, n );
 	dest[n] = '\0';
-	
+
 	return dest;
 }
 
@@ -126,7 +122,7 @@ void ymessage(const char *template, ...)
 	extern char *program_invocation_short_name;
 
 	fprintf(stderr, "%s: ", program_invocation_short_name);
-#endif     
+#endif
 	va_start(ap, template);
 	vfprintf(stderr, template, ap);
 	va_end(ap);
@@ -138,9 +134,9 @@ int yexists( char *file )
 	struct stat buf;
 
 	r = stat( file, &buf );
-	if ( r == 0 ) 
+	if ( r == 0 )
 		return 1;
-	else if ( errno == ENOENT ) 
+	else if ( errno == ENOENT )
 		return 0;
 	else yperrorf("stat'ing %s", file );
 }

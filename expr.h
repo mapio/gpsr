@@ -17,9 +17,6 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-
-/* $Id: expr.h,v 1.1 2002/03/12 08:45:22 santini Exp $ */
-
 #ifndef H_EXPR
 #define H_EXPR
 
@@ -50,31 +47,31 @@ typedef struct exprs {
 
 #define printse(e)    fprintse( stdout, (e) )
 #define sprintt(b,t)  { (b)[0]='\0'; sprintt_i( (b), (t) ); }
-	  
+
 #ifdef ALLOW_FUTURE
 #define yfabs
-#else 
+#else
 #define yfabs fabs
 #endif
-	  
+
 #define MAX_EXPR_STR       10000
 #define EXPR_STR_SAFEGUARD    20
-	  
+
 /* exprfuncs */
-	  
+
 #define TOK_CONST  0
 #define TOK_DATA   1
 #define TOK_MAX    13
 
 #define PS_INFIX   0 /* solo se arity == 2 */
-#define PS_PREFIX  1 
+#define PS_PREFIX  1
 
 #define UV_NO      0
 #define UV_EPHEM   1
 #define UV_DATAN   2
 
 #define MAX_ARITY  2
-	  
+
 #define tokarity(t)   functions[(int)(t)].arity
 #define tokstr(t)     functions[(int)(t)].name
 #define tokeval(t)    functions[(int)(t)].eval
@@ -94,13 +91,39 @@ struct exprfuncs {
 	unsigned char  arity;      /* arieta' */
 	void (*eval)( void );      /* come si valuta */
 	unsigned char printstyle;  /* come va stampato */
-	probv genprob;             /* prob. cumulativa di generazione */  
+	probv genprob;             /* prob. cumulativa di generazione */
 	unsigned char useval;      /* che tipo di valori usa in val */
 	void (*simplify)(node *);  /* come si semplifica se i figli sono const */
 };
 
 extern struct exprfuncs functions[];
 
-#include "expr.p"
-	  
+/* prototypes */
+
+datav getdata(int ds, int t);
+int datalen(int ds);
+void readdata(char *file, int ds);
+void equiprobfunc(void);
+expr *alloce(int tlen, int vlen);
+void freee(expr *e);
+expr *dupe(expr *e);
+expr *rnde(int md);
+void crossovere(expr *e1, expr *e2);
+void writee(int fd, expr *e);
+expr *reade(int fd);
+char *sprinte(char *buf, int len, expr *e);
+void fprinte(FILE *out, expr *e);
+exprv evale(expr *e, unsigned int time);
+node *npop(void);
+void npush(node *v);
+void ninit(void);
+node *allocn(void);
+void freet(node *t);
+void sprintt_i(char *vbuf, node *t);
+node *simplify(node *t);
+node *expr2tree(expr *e);
+char *sprintse(char *buf, expr *e);
+void fprintse(FILE *out, expr *e);
+void displaye(expr *e);
+
 #endif /* H_EXPR */

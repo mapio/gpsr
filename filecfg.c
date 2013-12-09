@@ -1,6 +1,6 @@
 /*
     GPSR: Genetic Programming for Symbolic Regression
-    Copyright (C) 2002 Massimo Santini
+    Copyright (C) 2012 Massimo Santini
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
